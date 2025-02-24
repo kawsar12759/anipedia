@@ -8,6 +8,8 @@ import '../src/css/index.css'
 import App from './App.jsx'
 import Home from './Pages/Home.jsx';
 import Favorites from './Pages/Favorites.jsx';
+import { AnimeProvider } from './Contexts/AnimeContexts.jsx';
+import SearchPage from './Pages/SearchPage.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,14 +21,26 @@ const router = createBrowserRouter([
       },
       {
         path: "/favorites",
-        element:<Favorites></Favorites>
-      }
+        element: <Favorites></Favorites>
+      },
+
+
+      {
+        path: "/search/:query",
+        element: <SearchPage></SearchPage>,
+        loader: ({ params }) => fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(
+          params.query
+        )}`)
+      },
+
     ]
   },
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AnimeProvider>
+      <RouterProvider router={router} />
+    </AnimeProvider>
   </StrictMode>,
 )
