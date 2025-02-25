@@ -1,6 +1,6 @@
 import { useEffect} from "react";
 
-import '../css/Home.css'
+
 import { useAnimeContext } from "../Contexts/AnimeContexts";
 import HeroSection from "../Components/HeroSection";
 

@@ -10,10 +10,15 @@ import Home from './Pages/Home.jsx';
 import Favorites from './Pages/Favorites.jsx';
 import { AnimeProvider } from './Contexts/AnimeContexts.jsx';
 import SearchPage from './Pages/SearchPage.jsx';
+import PopularAnime from './Pages/PopularAnime.jsx';
+import RecentAnime from './Pages/RecentAnime.jsx';
+import UpcomingAnime from './Pages/UpcomingAnime.jsx';
+import ErrorPage from './Pages/ErrorPage.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App></App>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "/",
@@ -22,6 +27,18 @@ const router = createBrowserRouter([
       {
         path: "/favorites",
         element: <Favorites></Favorites>
+      },
+      {
+        path: "/anime/popular",
+        element: <PopularAnime></PopularAnime>
+      },
+      {
+        path: "/anime/recent",
+        element: <RecentAnime></RecentAnime>
+      },
+      {
+        path: "/anime/upcoming",
+        element: <UpcomingAnime></UpcomingAnime>
       },
 
 

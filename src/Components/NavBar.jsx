@@ -77,7 +77,7 @@ const NavBar = () => {
                     <input
                         type="text"
                         placeholder="Search for Anime..."
-                        className="search-input h-12 w-40 xs:w-56 bg-[#2E2E2E] text-[#CCCCCC] px-4 py-2 rounded-full focus:outline-none rounded-r-none xs:rounded-r focus:ring-2 focus:ring-[#FFA500]"
+                        className="border-none rounded-md h-12 w-40 xs:w-56 bg-[#2E2E2E] text-[#CCCCCC] px-4 py-2  focus:outline-none focus:ring-2 focus:ring-gray-600 rounded-r-none xs:rounded-r "
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)} 
                     />

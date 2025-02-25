@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import AnimeCard from "../Components/AnimeCard";
-import "../css/Home.css";
+
 import { useAnimeContext } from "../Contexts/AnimeContexts";
 import { useEffect, useState } from "react";
 import { searchAnimes } from "../Services/api";
