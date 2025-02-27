@@ -26,10 +26,12 @@ const AnimeSection = () => {
                 const popularAnimes = await getPopularAnimes();
                 setPopularAnime(popularAnimes.slice(0, 15));
 
+                await new Promise(resolve => setTimeout(resolve, 600));
+
                 const recentAnimes = await getRecentAnimes();
                 setRecentAnime(recentAnimes.slice(0, 15));
 
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 600));
 
                 const upcomingAnimes = await getUpcomingAnimes();
                 setUpcomingAnime(upcomingAnimes.slice(0, 15));
@@ -127,11 +129,11 @@ const AnimeSection = () => {
         <div className="bg-[#232323]">
             {loading ? (
                 <div className="flex w-4/5 flex-col gap-4 mx-auto py-8 px-4">
-                    <div className="skeleton bg-gray-800 h-8 w-28"></div>
+                    <div className="skeleton bg-gray-800 h-8 w-80"></div>
                     <div className="skeleton bg-gray-800 h-72 mb-14 w-full"></div>
-                    <div className="skeleton bg-gray-800 h-8 w-28"></div>
+                    <div className="skeleton bg-gray-800 h-8 w-80"></div>
                     <div className="skeleton bg-gray-800 h-72 mb-14 w-full"></div>
-                    <div className="skeleton bg-gray-800 h-8 w-28"></div>
+                    <div className="skeleton bg-gray-800 h-8 w-80"></div>
                     <div className="skeleton bg-gray-800 h-72 mb-14 w-full"></div>
                 </div>
             ) : (

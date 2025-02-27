@@ -14,6 +14,8 @@ import PopularAnime from './Pages/PopularAnime.jsx';
 import RecentAnime from './Pages/RecentAnime.jsx';
 import UpcomingAnime from './Pages/UpcomingAnime.jsx';
 import ErrorPage from './Pages/ErrorPage.jsx';
+import GenreWiseAnime from './Pages/GenreWiseAnime.jsx';
+// import ActionGenrePage from './Pages/ActionGenrePage.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -39,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "/anime/upcoming",
         element: <UpcomingAnime></UpcomingAnime>
+      },
+      {
+        path:"anime/genre/:genre",
+        element:<GenreWiseAnime></GenreWiseAnime>
       },
 
 

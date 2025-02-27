@@ -1,13 +1,14 @@
-
 import AnimeCard from "../Components/AnimeCard";
 
 import { useEffect, useState } from "react";
-import { getRecentAnimes } from "../Services/api";
+import { getGenreWiseAnimes, getPopularAnimes } from "../Services/api";
+import { useParams } from "react-router-dom";
 import { useAnimeContext } from "../Contexts/AnimeContexts";
 
-const RecentAnime = () => {
+const GenreWiseAnime = () => {
     const [loading, setLoading] = useState(true);
-    const [recentAnime, setRecentAnime] = useState([]);
+    const [anime, setAnime] = useState([]);
+    const { genre } = useParams();
     const [fetching, setFetching] = useState(true);
     const { searchQuery, setSearchQuery } = useAnimeContext();
 
@@ -16,38 +17,36 @@ const RecentAnime = () => {
     }, [])
 
     useEffect(() => {
-        const loadAnimeData = async () => {
+        const loadGenreWiseAnimeData = async () => {
             try {
-                const recentAnimes = await getRecentAnimes();
-
-                if (recentAnimes.length > 0) {
-                    setRecentAnime(recentAnimes);
+                const genreWiseAnimes = await getGenreWiseAnimes(genre);
+                if (genreWiseAnimes.length > 0) {
+                    setAnime(genreWiseAnimes);
                     setFetching(false);
                 } else {
 
                     setTimeout(() => {
-                        loadAnimeData();
+                        loadGenreWiseAnimeData();
                     }, 1000);
                 }
 
             } catch (err) {
                 console.error(err);
-
                 setTimeout(() => {
-                    loadAnimeData();
+                    loadGenreWiseAnimeData();
                 }, 1000);
             } finally {
                 setLoading(false);
             }
         };
-        loadAnimeData();
-    }, []);
+        loadGenreWiseAnimeData();
+    }, [genre]);
 
 
     return (
         <div className="min-h-screen bg-[#232323] text-white p-5">
             <h2 className="text-3xl text-[#FFA500] font-bold mb-12">
-                🆕 Recently Aired Anime
+                {genre.charAt(0).toUpperCase() + genre.slice(1)} Anime
             </h2>
 
             {loading || fetching ? (
@@ -58,14 +57,14 @@ const RecentAnime = () => {
                 </div>
             ) : (
                 <>
-                    {recentAnime?.length > 0 ? (
+                    {anime?.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-8">
-                            {recentAnime.map((anime) => (
+                            {anime.map((anime) => (
                                 <AnimeCard key={anime.id} anime={anime} />
                             ))}
                         </div>
                     ) : (
-                        !loading && <p className="text-gray-400">No results found.</p>
+                        !loading && !noAnimeFound && <p className="text-gray-400">No results found.</p>
                     )}
                 </>
             )}
@@ -73,4 +72,4 @@ const RecentAnime = () => {
     );
 };
 
-export default RecentAnime;
+export default GenreWiseAnime;

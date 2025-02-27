@@ -1,29 +1,44 @@
-
 import AnimeCard from "../Components/AnimeCard";
-
 import { useEffect, useState } from "react";
 import { getPopularAnimes } from "../Services/api";
-
+import { useAnimeContext } from "../Contexts/AnimeContexts";
 
 const PopularAnime = () => {
     const [loading, setLoading] = useState(true);
     const [popularAnime, setPopularAnime] = useState([]);
+    const [fetching, setFetching] = useState(true);
 
+    const { searchQuery, setSearchQuery } = useAnimeContext();
+
+    useEffect(() => {
+        setSearchQuery("")
+    }, [])
     useEffect(() => {
         const loadAnimeData = async () => {
             try {
                 const popularAnimes = await getPopularAnimes();
-                setPopularAnime(popularAnimes);
+                if (popularAnimes.length > 0) {
+                    setPopularAnime(popularAnimes);
+                    setFetching(false);
+                } else {
 
+                    setTimeout(() => {
+                        loadAnimeData();
+                    }, 1000);
+                }
             } catch (err) {
                 console.error(err);
+
+                setTimeout(() => {
+                    loadAnimeData();
+                }, 1000);
             } finally {
                 setLoading(false);
             }
         };
+
         loadAnimeData();
     }, []);
-
 
     return (
         <div className="min-h-screen bg-[#232323] text-white p-5">
@@ -31,11 +46,9 @@ const PopularAnime = () => {
                 🔥 Most Popular Anime
             </h2>
 
-            {loading ? (
-
+            {loading || fetching ? (
                 <div className="text-center text-xl text-gray-300">
                     Loading results...
-
                 </div>
             ) : (
                 <>
@@ -46,7 +59,9 @@ const PopularAnime = () => {
                             ))}
                         </div>
                     ) : (
-                        !loading && <p className="text-gray-400">No results found.</p>
+                        !loading && (
+                            <p className="text-gray-400">No results found.</p>
+                        )
                     )}
                 </>
             )}

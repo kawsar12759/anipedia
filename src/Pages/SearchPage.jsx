@@ -7,19 +7,31 @@ import { searchAnimes } from "../Services/api";
 
 const SearchPage = () => {
     const { query } = useParams();
-    const { animes, setAnimes, error, setError, loading, setLoading } = useAnimeContext();
+    const { error, setError, animes,setAnimes,loading,setLoading } = useAnimeContext();
     const [isFirstLoad, setIsFirstLoad] = useState(true); // Track first load
+    const [fetching, setFetching] = useState(true);
+
 
     useEffect(() => {
         const loadAnimes = async () => {
             setLoading(true);
+            setFetching(true);
             try {
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 const searchedAnimes = await searchAnimes(query);
-                setAnimes(searchedAnimes || []);
-                setError(null);
+                if (searchedAnimes.length > 0) {
+                    setAnimes(searchedAnimes);
+                    setFetching(false);
+                    setLoading(false);
+                } else {
+
+                    setTimeout(() => {
+                        loadAnimes();
+                    }, 2000);
+                }
+
             } catch (err) {
                 console.log(err);
-                setError("Failed to Load");
             } finally {
                 setLoading(false);
                 setIsFirstLoad(false);
@@ -37,11 +49,11 @@ const SearchPage = () => {
                 Search Results for "{query}"
             </h2>
 
-            {error && <div className="text-red-500">{error}</div>}
+            {/* {error && <div className="text-red-500">{error}</div>} */}
 
-            {loading && isFirstLoad ? (
+            {loading || fetching ? (
 
-                <div className="loading text-center text-lg text-gray-300">
+                <div className="text-center text-xl text-gray-300">
                     Loading results...
                 </div>
             ) : (
