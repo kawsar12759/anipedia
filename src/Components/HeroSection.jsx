@@ -15,7 +15,7 @@ const HeroSection = () => {
                     Your ultimate destination for exploring the world of anime. Discover popular series, add favorites, and stay updated with the latest releases.
                 </p>
                 <Link
-                    to="/explore"
+                    to="/anime/popular"
                     className="bg-[#FFA500] hover:bg-[#E59400] text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-300 animate-bounce-in"
                 >
                     Explore Anime

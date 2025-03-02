@@ -13,31 +13,39 @@ const genreList = [
   { id: 41, name: "thriller" }
 ];
 
-export const getPopularAnimes = async () => {
-  const response = await fetch(`https://api.jikan.moe/v4/top/anime?filter=bypopularity`);
+export const getPopularAnimes = async (page=1) => {
+  const response = await fetch(`https://api.jikan.moe/v4/top/anime?filter=bypopularity&page=${page}`);
   const data = await response.json();
   return data.data;
 };
 
-export const getRecentAnimes = async () => {
-  const response = await fetch(`https://api.jikan.moe/v4/seasons/now`);
+export const getRecentAnimes = async (page=1) => {
+  const response = await fetch(`https://api.jikan.moe/v4/seasons/now?page=${page}`);
   const data = await response.json();
   return data.data;
 };
 
-export const getGenreWiseAnimes = async (genre) => {
+export const getGenreWiseAnimes = async (genre,page=1) => {
   const genreID = (genreList.find(gen => gen.name.toLowerCase() === genre)).id;
-  const response = await fetch(`https://api.jikan.moe/v4/anime?genres=${genreID}&order_by=score&sort=desc`);
+  const response = await fetch(`https://api.jikan.moe/v4/anime?genres=${genreID}&order_by=score&sort=desc&page=${page}`);
   const data = await response.json();
   return data.data;
 
 
 };
 
-export const getUpcomingAnimes = async () => {
-  const response = await fetch(`https://api.jikan.moe/v4/seasons/upcoming`);
+export const getUpcomingAnimes = async (page=1) => {
+  const response = await fetch(`https://api.jikan.moe/v4/seasons/upcoming?page=${page}`);
   const data = await response.json();
   return data.data;
+};
+
+
+export const fetchAnimeDetails = async (id) => {
+    const response = await fetch(`https://api.jikan.moe/v4/anime/${id}`);
+    if (!response.ok) throw new Error('Failed to fetch anime details');
+    const data = await response.json();
+    return data.data; 
 };
 
 export const searchAnimes = async (query) => {

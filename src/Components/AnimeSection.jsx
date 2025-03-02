@@ -6,6 +6,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import { GrPrevious, GrNext } from "react-icons/gr";
+import { Link } from "react-router-dom";
 
 const AnimeSection = () => {
     const [popularAnime, setPopularAnime] = useState([]);
@@ -89,7 +90,7 @@ const AnimeSection = () => {
                 >
                     {animeList.map((anime) => (
                         <SwiperSlide key={anime.mal_id} className="overflow-visible flex justify-center items-center px-2">
-                            <div className="bg-gray-800 rounded-lg p-3 shadow-lg transition-transform transform hover:scale-105 hover:translate-y-5 flex flex-col justify-center items-center z-20">
+                            <Link to={`/anime/details/${anime.mal_id}`}><div className="bg-gray-800 rounded-lg p-3 shadow-lg transition-transform transform hover:scale-105 hover:translate-y-5 flex flex-col justify-center items-center z-20">
                                 <img
                                     src={anime.images?.jpg?.large_image_url}
                                     alt={anime.title}
@@ -98,7 +99,7 @@ const AnimeSection = () => {
                                 <h3 className="text-white h-12 flex justify-center items-center mt-2 text-sm font-semibold text-center">
                                     {anime.title}
                                 </h3>
-                            </div>
+                            </div></Link>
                         </SwiperSlide>
                     ))}
                     <SwiperSlide>
@@ -108,7 +109,7 @@ const AnimeSection = () => {
                         </a>
                     </SwiperSlide>
                 </Swiper>
-                {/* Navigation buttons */}
+
                 <button
                     ref={prevRef}
                     className="absolute top-1/2 -left-5 transform -translate-y-1/2 bg-gray-700 opacity-70 hover:opacity-100 hover:cursor-pointer text-white p-2 rounded-full z-10 hover:scale-115"

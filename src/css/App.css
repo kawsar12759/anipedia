@@ -2,5 +2,7 @@
 @plugin "daisyui";
 
 @theme {
-    --breakpoint-xs: 33rem;
-  }
+  --breakpoint-xxs: 23rem;
+  --breakpoint-xs: 33rem;
+  --breakpoint-smd: 54rem;
+}

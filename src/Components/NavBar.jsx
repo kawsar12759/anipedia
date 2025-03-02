@@ -17,7 +17,7 @@ const NavBar = () => {
             setLoading(true);
             setAnimes([]);
             navigate(`/search/${encodeURIComponent(searchQuery)}`);
-            setIsSearchVisible(false); // Close search box after search
+            setIsSearchVisible(false);
         } catch (err) {
             console.log(err);
             setError('Failed to Search Animes');
@@ -39,53 +39,29 @@ const NavBar = () => {
         { id: 41, name: "Thriller" },
     ];
 
-    // State for toggling genre dropdown visibility
     const [isGenresOpen, setIsGenresOpen] = useState(false);
 
-    // State for toggling search box visibility on mobile
     const [isSearchVisible, setIsSearchVisible] = useState(false);
 
-    // Ref for the dropdown
     const dropdownRef = useRef(null);
 
-    // Toggle function for dropdown
     const toggleGenresDropdown = () => setIsGenresOpen(!isGenresOpen);
 
-    // Function to close the dropdown
     const closeGenresDropdown = () => setIsGenresOpen(false);
 
-    // Toggle function for search box
     const toggleSearchBox = () => setIsSearchVisible(!isSearchVisible);
 
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsGenresOpen(false);
-            }
-        };
 
-        // Add event listener
-        document.addEventListener("mousedown", handleClickOutside);
-
-        // Cleanup
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-
-    // Close search box when device width is greater than 415px
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth > 415) {
-                setIsSearchVisible(false); // Close search box on larger screens
+                setIsSearchVisible(false); 
             }
         };
 
-        // Add resize event listener
         window.addEventListener("resize", handleResize);
 
-        // Cleanup
+
         return () => {
             window.removeEventListener("resize", handleResize);
         };
@@ -106,7 +82,6 @@ const NavBar = () => {
                         <li><NavLink to="/anime/popular" className={({ isActive }) => isActive ? "text-[#FFA500] text-md" : "text-md"}>Popular</NavLink></li>
                         <li><NavLink to="/anime/recent" className={({ isActive }) => isActive ? "text-[#FFA500] text-md" : "text-md"}>Recent</NavLink></li>
 
-                        {/* Genre Dropdown */}
                         <li>
                             <div
                                 onClick={toggleGenresDropdown}
@@ -181,7 +156,6 @@ const NavBar = () => {
                         </NavLink>
                     </li>
 
-                    {/* Genre Dropdown (Desktop) */}
                     <li>
                         <div
                             onClick={toggleGenresDropdown}
@@ -197,7 +171,7 @@ const NavBar = () => {
                                         <NavLink
                                             to={`/anime/genre/${genre.name.toLowerCase()}`}
                                             className={({ isActive }) => isActive ? "text-[#FFA500] text-md" : "text-md hover:text-[#FFA500]"}
-                                            onClick={closeGenresDropdown} // Close dropdown on genre click
+                                            onClick={closeGenresDropdown} 
                                         >
                                             {genre.name}
                                         </NavLink>
@@ -210,20 +184,18 @@ const NavBar = () => {
             </div>
 
             <div className="navbar-end">
-                {/* Search button for mobile */}
                 <button
                     onClick={toggleSearchBox}
-                    className="btn xs:hidden bg-[#FFA500] hover:bg-[#E59400] text-white rounded-full px-4 py-2 transition-colors duration-200"
+                    className="btn xs:hidden bg-[#FFA500] hover:bg-[#E59400] text-white rounded-full px-3 py-2 transition-colors duration-200"
                 >
                     <FaSearch />
                 </button>
 
-                {/* Search form for larger screens */}
                 <form onSubmit={handleSearch} className="hidden xs:flex items-center gap-2">
                     <input
                         type="text"
                         placeholder="Search for Anime..."
-                        className="border-none rounded-md h-12 w-40 xs:w-56 bg-[#2E2E2E] text-[#CCCCCC] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-600 rounded-r-none xs:rounded-r"
+                        className="border-none rounded-md h-12 w-52 sm:w-56 bg-[#2E2E2E] text-[#CCCCCC] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-600 rounded-r-none xs:rounded-r"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -236,7 +208,7 @@ const NavBar = () => {
                 </form>
             </div>
 
-            {/* Search form for mobile (appears below the navbar) */}
+    
             {isSearchVisible && (
                 <div className="absolute top-full left-0 w-full bg-transparent px-4 z-50">
                     <form onSubmit={handleSearch} className="flex items-center gap-2">
