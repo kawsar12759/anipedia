@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchAnimeDetails } from '../Services/api';
-import { FaStar, FaPlay, FaCalendarAlt, FaTv, FaClock, FaChartLine, FaExclamationCircle, FaPlayCircle } from 'react-icons/fa';
+import { FaStar, FaPlay, FaCalendarAlt, FaTv, FaClock, FaChartLine, FaExclamationCircle, FaHeart } from 'react-icons/fa';
+import { useAnimeContext } from '../Contexts/AnimeContexts'; // Import the context
 
 const AnimeDetails = () => {
     const { id } = useParams();
     const [anime, setAnime] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+
+    const { isFavorite, addToFavorites, removeFromFavorites } = useAnimeContext();
 
     useEffect(() => {
         const getAnimeDetails = async () => {
@@ -24,6 +27,14 @@ const AnimeDetails = () => {
 
         getAnimeDetails();
     }, [id]);
+
+    const onFavoriteClick = () => {
+        if (isFavorite(anime.mal_id)) {
+            removeFromFavorites(anime.mal_id);
+        } else {
+            addToFavorites(anime);
+        }
+    };
 
     if (loading) {
         return (
@@ -51,6 +62,17 @@ const AnimeDetails = () => {
                             alt={anime.title || "Untitled Anime"}
                             className="rounded-lg shadow-2xl w-full h-auto"
                         />
+
+                        <button
+                            onClick={onFavoriteClick}
+                            className={`mt-6 w-full flex items-center justify-center space-x-2 py-2 rounded-lg hover:cursor-pointer
+                                ${isFavorite(anime.mal_id) ? "bg-red-500" : "bg-gray-700 hover:bg-[#FFA500]"}`}
+                        >
+                            <FaHeart className={`text-xl ${isFavorite(anime.mal_id) ? "text-white" : "text-red-500"}`} />
+                            <span className="text-white font-semibold">
+                                {isFavorite(anime.mal_id) ? "Remove from Favorites" : "Add to Favorites"}
+                            </span>
+                        </button>
 
                         <div className="mt-6">
                             <h2 className="text-3xl font-bold">{anime.title || "Untitled Anime"}</h2>
@@ -128,7 +150,6 @@ const AnimeDetails = () => {
                             </div>
                         ) : (
                             <div className="mb-8">
-                                
                                 <p className="text-gray-400">No trailer available for this anime.</p>
                             </div>
                         )}

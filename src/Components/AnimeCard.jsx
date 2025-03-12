@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAnimeContext } from '../Contexts/AnimeContexts';
 import { Link } from 'react-router-dom';
-
+import { FaHeart } from "react-icons/fa6";
 const AnimeCard = ({ anime }) => {
     const { isFavorite, addToFavorites, removeFromFavorites } = useAnimeContext();
     const [isAnimating, setIsAnimating] = useState(false);
@@ -50,7 +50,7 @@ const AnimeCard = ({ anime }) => {
                             ${isAnimating ? "animate-ping" : ""}
                              hover:scale-110`}
                     >
-                        ❤︎
+                        <FaHeart />
                     </button>
 
                     {anime.aired?.prop?.from?.year && (

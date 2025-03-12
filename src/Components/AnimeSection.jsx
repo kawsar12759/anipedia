@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getPopularAnimes, getRecentAnimes, getUpcomingAnimes } from "../Services/api";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, FreeMode } from "swiper/modules";
@@ -45,27 +45,13 @@ const AnimeSection = () => {
         loadAnimeData();
     }, []);
 
-    useEffect(() => {
-        if (prevUpcomingRef.current && nextUpcomingRef.current) {
-            setTimeout(() => {
-                const swiper = document.querySelector(".swiper-container-upcoming")?.swiper;
-                if (swiper) {
-                    swiper.params.navigation.prevEl = prevUpcomingRef.current;
-                    swiper.params.navigation.nextEl = nextUpcomingRef.current;
-                    swiper.navigation.destroy();
-                    swiper.navigation.init();
-                    swiper.navigation.update();
-                }
-            }, 500);
-        }
-    }, [upcomingAnime]);
-
     const renderAnimeCarousel = (animeList, categoryUrl, prevRef, nextRef, swiperClass) => {
         if (!Array.isArray(animeList) || animeList.length === 0) {
-            return <div className="flex w-full flex-col gap-4">
-                <div className="skeleton bg-gray-800 h-72 w-full"></div>
-
-            </div>;
+            return (
+                <div className="flex w-full flex-col gap-4">
+                    <div className="skeleton bg-gray-800 h-72 w-full"></div>
+                </div>
+            );
         }
 
         return (
@@ -74,10 +60,15 @@ const AnimeSection = () => {
                     slidesPerView={1}
                     spaceBetween={10}
                     freeMode={true}
-                    navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
-                    onBeforeInit={(swiper) => {
+                    navigation={{
+                        prevEl: prevRef.current,
+                        nextEl: nextRef.current,
+                    }}
+                    onInit={(swiper) => {
                         swiper.params.navigation.prevEl = prevRef.current;
                         swiper.params.navigation.nextEl = nextRef.current;
+                        swiper.navigation.init();
+                        swiper.navigation.update();
                     }}
                     breakpoints={{
                         640: { slidesPerView: 2 },
@@ -90,20 +81,22 @@ const AnimeSection = () => {
                 >
                     {animeList.map((anime) => (
                         <SwiperSlide key={anime.mal_id} className="overflow-visible flex justify-center items-center px-2">
-                            <Link to={`/anime/details/${anime.mal_id}`}><div className="bg-gray-800 rounded-lg p-3 shadow-lg transition-transform transform hover:scale-105 hover:translate-y-5 flex flex-col justify-center items-center z-20">
-                                <img
-                                    src={anime.images?.jpg?.large_image_url}
-                                    alt={anime.title}
-                                    className="w-full h-96 object-cover rounded-md"
-                                />
-                                <h3 className="text-white h-12 flex justify-center items-center mt-2 text-sm font-semibold text-center">
-                                    {anime.title}
-                                </h3>
-                            </div></Link>
+                            <Link to={`/anime/details/${anime.mal_id}`}>
+                                <div className="bg-gray-800 rounded-lg p-3 shadow-lg transition-transform transform hover:scale-105 hover:translate-y-5 flex flex-col justify-center items-center z-20">
+                                    <img
+                                        src={anime.images?.jpg?.large_image_url}
+                                        alt={anime.title}
+                                        className="w-full h-96 object-cover rounded-md"
+                                    />
+                                    <h3 className="text-white h-12 flex justify-center items-center mt-2 text-sm font-semibold text-center">
+                                        {anime.title}
+                                    </h3>
+                                </div>
+                            </Link>
                         </SwiperSlide>
                     ))}
                     <SwiperSlide>
-                        <a href={categoryUrl} className="flex flex-col items-center justify-center h-[464px] bg-gray-600 text-white rounded-lg p-3 shadow-lg transition hover:scale-105  ">
+                        <a href={categoryUrl} className="flex flex-col items-center justify-center h-[464px] bg-gray-600 text-white rounded-lg p-3 shadow-lg transition hover:scale-105">
                             <p className="font-bold">Browse All</p>
                             <span>➡️</span>
                         </a>

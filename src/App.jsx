@@ -12,7 +12,7 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className='min-w-[310px]'>
       <NavBar></NavBar>
       <Outlet></Outlet>
       <Footer></Footer>

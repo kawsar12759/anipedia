@@ -21,18 +21,18 @@ const Favorites = () => {
                         {favorites.map((anime) => (
                             <div
                                 key={anime.mal_id}
-                                className="xxs:flex  justify-between bg-gray-800 rounded-lg p-4 shadow-lg hover:bg-gray-700 transition-colors"
+                                className="xs:flex  justify-between bg-gray-800 rounded-lg p-4 shadow-lg hover:bg-gray-700 transition-colors"
                             >
-                                <div onClick={() => navigate(`/anime/details/${anime.mal_id}`)} className='xxs:flex items-center'>
-                                    <div className=''>
+                                <div onClick={() => navigate(`/anime/details/${anime.mal_id}`)} className='xs:flex items-center w-full'>
+                                    <div className='block xs:h-full'>
                                         <img
                                             src={anime.images?.jpg?.large_image_url}
                                             alt={anime.title}
-                                            className="w-full   xxs:w-28 xxs:h-40 object-cover rounded-md"
+                                            className="w-full xs:w-36 md:w-40 xs:h-full object-cover rounded-md"
                                         />
                                     </div>
-                                    <div className='flex flex-col items-start xxs:items-center justify-center '>
-                                        <div className="ml-1 mt-2 mb-4 xxs:mt-0 xxs:mb-0 xxs:ml-4">
+                                    <div className='flex w-full flex-col items-start'>
+                                        <div className="ml-1 mt-2 mb-4 xs:mt-0 xs:mb-0 xs:ml-4">
                                             <h3 className="text-xl font-bold text-white">
                                                 {anime.title}
                                             </h3>
