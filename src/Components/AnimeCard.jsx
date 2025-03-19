@@ -45,7 +45,7 @@ const AnimeCard = ({ anime }) => {
               
                     <button
                         onClick={onFavoriteClick}
-                        className={`absolute top-4 right-4 text-3xl transition-transform transform 
+                        className={`absolute top-4 right-4 text-3xl hover:cursor-pointer transition-transform transform 
                             ${favorite ? "text-red-500" : "text-gray-400"} 
                             ${isAnimating ? "animate-ping" : ""}
                              hover:scale-110`}
