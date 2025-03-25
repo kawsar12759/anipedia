@@ -21,18 +21,22 @@ const AnimeSection = () => {
     const prevUpcomingRef = useRef(null);
     const nextUpcomingRef = useRef(null);
 
+    const [popularSwiper, setPopularSwiper] = useState(null);
+    const [recentSwiper, setRecentSwiper] = useState(null);
+    const [upcomingSwiper, setUpcomingSwiper] = useState(null);
+
     useEffect(() => {
         const loadAnimeData = async () => {
             try {
                 const popularAnimes = await getPopularAnimes();
                 setPopularAnime(popularAnimes.slice(0, 15));
 
-                await new Promise(resolve => setTimeout(resolve, 600));
+                await new Promise((resolve) => setTimeout(resolve, 600));
 
                 const recentAnimes = await getRecentAnimes();
                 setRecentAnime(recentAnimes.slice(0, 15));
 
-                await new Promise(resolve => setTimeout(resolve, 600));
+                await new Promise((resolve) => setTimeout(resolve, 600));
 
                 const upcomingAnimes = await getUpcomingAnimes();
                 setUpcomingAnime(upcomingAnimes.slice(0, 15));
@@ -45,7 +49,41 @@ const AnimeSection = () => {
         loadAnimeData();
     }, []);
 
-    const renderAnimeCarousel = (animeList, categoryUrl, prevRef, nextRef, swiperClass) => {
+    useEffect(() => {
+        if (popularSwiper && prevPopularRef.current && nextPopularRef.current) {
+            popularSwiper.params.navigation.prevEl = prevPopularRef.current;
+            popularSwiper.params.navigation.nextEl = nextPopularRef.current;
+            popularSwiper.navigation.init();
+            popularSwiper.navigation.update();
+        }
+    }, [popularSwiper, prevPopularRef.current, nextPopularRef.current]);
+
+    useEffect(() => {
+        if (recentSwiper && prevRecentRef.current && nextRecentRef.current) {
+            recentSwiper.params.navigation.prevEl = prevRecentRef.current;
+            recentSwiper.params.navigation.nextEl = nextRecentRef.current;
+            recentSwiper.navigation.init();
+            recentSwiper.navigation.update();
+        }
+    }, [recentSwiper, prevRecentRef.current, nextRecentRef.current]);
+
+    useEffect(() => {
+        if (upcomingSwiper && prevUpcomingRef.current && nextUpcomingRef.current) {
+            upcomingSwiper.params.navigation.prevEl = prevUpcomingRef.current;
+            upcomingSwiper.params.navigation.nextEl = nextUpcomingRef.current;
+            upcomingSwiper.navigation.init();
+            upcomingSwiper.navigation.update();
+        }
+    }, [upcomingSwiper, prevUpcomingRef.current, nextUpcomingRef.current]);
+
+    const renderAnimeCarousel = (
+        animeList,
+        categoryUrl,
+        prevRef,
+        nextRef,
+        swiperClass,
+        setSwiperInstance
+    ) => {
         if (!Array.isArray(animeList) || animeList.length === 0) {
             return (
                 <div className="flex w-full flex-col gap-4">
@@ -57,19 +95,10 @@ const AnimeSection = () => {
         return (
             <div className="relative flex items-center overflow-visible">
                 <Swiper
+                    onSwiper={setSwiperInstance}
                     slidesPerView={1}
                     spaceBetween={10}
                     freeMode={true}
-                    navigation={{
-                        prevEl: prevRef.current,
-                        nextEl: nextRef.current,
-                    }}
-                    onInit={(swiper) => {
-                        swiper.params.navigation.prevEl = prevRef.current;
-                        swiper.params.navigation.nextEl = nextRef.current;
-                        swiper.navigation.init();
-                        swiper.navigation.update();
-                    }}
                     breakpoints={{
                         640: { slidesPerView: 2 },
                         900: { slidesPerView: 3 },
@@ -80,7 +109,10 @@ const AnimeSection = () => {
                     className={`h-[500px] overflow-visible ${swiperClass}`}
                 >
                     {animeList.map((anime) => (
-                        <SwiperSlide key={anime.mal_id} className="overflow-visible flex justify-center items-center px-2">
+                        <SwiperSlide
+                            key={anime.mal_id}
+                            className="overflow-visible flex justify-center items-center px-2"
+                        >
                             <Link to={`/anime/details/${anime.mal_id}`}>
                                 <div className="bg-gray-800 rounded-lg p-3 shadow-lg transition-transform transform hover:scale-105 hover:translate-y-5 flex flex-col justify-center items-center z-20">
                                     <img
@@ -96,7 +128,10 @@ const AnimeSection = () => {
                         </SwiperSlide>
                     ))}
                     <SwiperSlide>
-                        <a href={categoryUrl} className="flex flex-col items-center justify-center h-[464px] bg-gray-600 text-white rounded-lg p-3 shadow-lg transition hover:scale-105">
+                        <a
+                            href={categoryUrl}
+                            className="flex flex-col items-center justify-center h-[464px] bg-gray-600 text-white rounded-lg p-3 shadow-lg transition hover:scale-105"
+                        >
                             <p className="font-bold">Browse All</p>
                             <span>➡️</span>
                         </a>
@@ -105,13 +140,13 @@ const AnimeSection = () => {
 
                 <button
                     ref={prevRef}
-                    className="absolute top-1/2 -left-5 transform -translate-y-1/2 bg-gray-700 opacity-70 hover:opacity-100 hover:cursor-pointer text-white p-2 rounded-full z-10 hover:scale-115"
+                    className="absolute top-1/2 -left-5 transform -translate-y-1/2 bg-gray-700 opacity-70 hover:opacity-100 text-white p-2 rounded-full z-10 hover:scale-115 hover:cursor-pointer"
                 >
                     <GrPrevious className="font-bold text-4xl" />
                 </button>
                 <button
                     ref={nextRef}
-                    className="absolute top-1/2 -right-5 transform -translate-y-1/2 bg-gray-700 opacity-70 hover:opacity-100 hover:cursor-pointer text-white p-2 rounded-full z-10 hover:scale-115"
+                    className="absolute top-1/2 -right-5 transform -translate-y-1/2 bg-gray-700 opacity-70 hover:opacity-100 text-white p-2 rounded-full z-10 hover:scale-115 hover:cursor-pointer"
                 >
                     <GrNext className="font-bold text-4xl" />
                 </button>
@@ -132,14 +167,41 @@ const AnimeSection = () => {
                 </div>
             ) : (
                 <div className="w-4/5 mx-auto px-4 py-8">
-                    <h2 className="text-3xl font-bold text-white mb-4">🔥 Most Popular Anime</h2>
-                    {renderAnimeCarousel(popularAnime, "/anime/popular", prevPopularRef, nextPopularRef, "")}
+                    <h2 className="text-3xl font-bold text-white mb-4">
+                        🔥 Most Popular Anime
+                    </h2>
+                    {renderAnimeCarousel(
+                        popularAnime,
+                        "/anime/popular",
+                        prevPopularRef,
+                        nextPopularRef,
+                        "",
+                        setPopularSwiper
+                    )}
 
-                    <h2 className="text-3xl font-bold text-white mt-8 mb-4">🆕 Recently Aired Anime</h2>
-                    {renderAnimeCarousel(recentAnime, "/anime/recent", prevRecentRef, nextRecentRef, "")}
+                    <h2 className="text-3xl font-bold text-white mt-8 mb-4">
+                        🆕 Recently Aired Anime
+                    </h2>
+                    {renderAnimeCarousel(
+                        recentAnime,
+                        "/anime/recent",
+                        prevRecentRef,
+                        nextRecentRef,
+                        "",
+                        setRecentSwiper
+                    )}
 
-                    <h2 className="text-3xl font-bold text-white mt-8 mb-4">📅 Upcoming Anime</h2>
-                    {renderAnimeCarousel(upcomingAnime, "/anime/upcoming", prevUpcomingRef, nextUpcomingRef, "swiper-container-upcoming")}
+                    <h2 className="text-3xl font-bold text-white mt-8 mb-4">
+                        📅 Upcoming Anime
+                    </h2>
+                    {renderAnimeCarousel(
+                        upcomingAnime,
+                        "/anime/upcoming",
+                        prevUpcomingRef,
+                        nextUpcomingRef,
+                        "swiper-container-upcoming",
+                        setUpcomingSwiper
+                    )}
                 </div>
             )}
         </div>
